@@ -1,12 +1,15 @@
 package mx.unam.aragon.fes.persistencia;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import java.util.ArrayList;
 import mx.unam.aragon.fes.Empleado;
 
-
 public class ArchivoEmpleado {
+
     private String archivo;
 
     public ArchivoEmpleado() {
@@ -23,9 +26,9 @@ public class ArchivoEmpleado {
     public void setArchivo(String archivo) {
         this.archivo = archivo;
     }
-    
-    public void guardarEmpleados(ArrayList<Empleado>datos){
-        //aqui el codigo para grabar en Disco Duro
+
+    public void guardarEmpleados(ArrayList<Empleado> datos) {
+        // aqui el codigo para grabar ed Disco Duro
         try {
             ObjectOutputStream fSalida = new ObjectOutputStream(
                     new FileOutputStream(archivo));
@@ -36,12 +39,26 @@ public class ArchivoEmpleado {
             e.printStackTrace();
         }
     }
-    
-    public ArrayList<Empleado> leerEmpleados(){
-        ArrayList<Empleado> tmp=null;
-        
-        //leer del disco duro
-        //se sube a un ArrayList tmp
+
+    public ArrayList<Empleado> leerEmpleados() {
+        ArrayList<Empleado> tmp = null;
+
+        try {
+            ObjectInputStream fLectura = new ObjectInputStream(
+                    new FileInputStream(archivo));
+
+            tmp = (ArrayList<Empleado>) fLectura.readObject();
+            if (tmp == null) {
+                System.out.println("No hay nada");
+            } else {
+                System.out.println("Nombre" + tmp.size());
+            }
+            fLectura.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error" + ex.toString());
+        }
         return tmp;
     }
+
 }
